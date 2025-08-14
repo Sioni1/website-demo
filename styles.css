@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Museum Gallery</title>
+  <style>
+    :root{
+      --page-bg: #f4f4f4;
+      --card-bg: #fff;
+      --max-width: 1100px;
+      --gutter: 16px;
+      --radius: 8px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--page-bg);
+      color:#222;
+      line-height:1.4;
+    }
+
+    header{
+      background:#222;
+      color:#fff;
+      padding:16px;
+      text-align:center;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
+      margin-bottom: 12px;
+    }
+    header h1{font-size:1.3rem;letter-spacing:0.02em}
+
+    /* Professional gallery grid */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: var(--gutter);
+      max-width: var(--max-width);
+      padding: var(--gutter);
+      margin: auto;
+    }
+
+    .gallery-item {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+    .gallery-item:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 380px;
+      object-fit: contain;
+      background-color: #f6f6f6;
+      display: block;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .meta {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-grow: 1;
+    }
+    .meta .title { font-weight: 600; font-size: 1rem; }
+    .meta .country { color: #777; font-size: 0.9rem; }
+
+    .actions {
+      padding: 0 12px 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .actions a {
+      font-size: 0.85rem;
+      color: #0b66c3;
+      text-decoration: none;
+      user-select: none;
+    }
+    .actions a:hover { text-decoration: underline; }
+
+    /* Detail View */
+    #detail-view {
+      max-width: var(--max-width);
+      margin: 20px auto;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px;
+      display: none; /* hidden initially */
+    }
+    #detail-view img {
+      max-width: 100%;
+      max-height: 480px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 16px;
+      border-radius: var(--radius);
+      background-color: #f6f6f6;
+    }
+    #detail-view h2 {
+      margin-bottom: 8px;
+    }
+    #detail-view p {
+      margin: 4px 0;
+      color: #555;
+    }
+    #back-button {
+      margin-top: 16px;
+      background-color: #0b66c3;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    #back-button:hover {
+      background-color: #094a87;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Museum Gallery</h1>
+    <div style="font-size:0.85rem;color:#ddd;margin-top:4px">Click an image or "View original" to see details</div>
+  </header>
+
+  <main>
+    <section class="gallery" id="gallery" aria-live="polite"></section>
+
+    <section id="detail-view" aria-live="polite" aria-label="Image details view">
+      <img id="detail-image" src="" alt="">
+      <h2 id="detail-title"></h2>
+      <p><strong>Country:</strong> <span id="detail-country"></span></p>
+      <p><strong>Made for:</strong> <span id="detail-purpose"></span></p>
+      <button id="back-button" aria-label="Back to gallery">Back to Gallery</button>
+    </section>
+  </main>
+
+  <script>
+    const museumItems = [
+      { name: "Soplador",    country: "South America", image: "brazing.jpeg", purpose: "Tool used for brazing fire" },
+      { name: "Tipiti",   country: "South America", image: "colombia.jpeg", purpose: "Process cassava using this traditional tool" },
+      { name: "Imbehe",     country: "Rwanda", image: "imbehe.jpeg", purpose: "Wooden plate for sharing meals" },
+      { name: "Coal Pot",    country: "East Africa", image: "kampala.jpeg", purpose: "Made for cooking" },
+      { name: "Pestle",     country: "Unknown", image: "pestle.jpeg", purpose: "Grinding tool" },
+      { name: "South",      country: "South Africa", image: "south.jpeg", purpose: "Decorative art" },
+      { name: "Ubugari",    country: "Rwanda", image: "ubugari.jpeg", purpose: "Food preparation" },
+      { name: "Uganda",     country: "Uganda", image: "uganda.jpeg", purpose: "Traditional object" },
+      { name: "Kikwazo",    country: "Kenya (Masai tribe)", image: "umukubuzo.jpeg", purpose: "Broom for sweeping" },
+      { name: "Umwuko",     country: "Rwanda", image: "umwuko.jpeg", purpose: "Ceremonial object" },
+      { name: "Dark Pot",   country: "Uganda", image: "amazi.webp", purpose: "Water container and cooking pot" },
+      { name: "Ibiti",      country: "Rwanda", image: "ibiti.jpeg", purpose: "Hand-carved wooden tool, spun between palms for stirring tomatoes, porridge, and more" },
+      { name: "Umukara",    country: "Rwanda", image: "umukara.jpeg", purpose: "Musical instrument" },
+
+      { name: "Grinding", country: "Unknown", image: "grinding.jpeg", purpose: "Grinding tool" },
+      { name: "Agacuma", country: "Rwanda", image: "agacuma.jpeg", purpose: "Handcrafted wooden container for milking, perfect for holding beverages or decor" },
+      { name: "Icyansi", country: "Rwanda", image: "icyansi.png", purpose: "Ceremonial dish" },
+      { name: "Isafuriya", country: "Rwanda", image: "isafuriya.jpeg", purpose: "Cooking pot" }
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const detailView = document.getElementById('detail-view');
+    const detailImage = document.getElementById('detail-image');
+    const detailTitle = document.getElementById('detail-title');
+    const detailCountry = document.getElementById('detail-country');
+    const detailPurpose = document.getElementById('detail-purpose');
+    const backButton = document.getElementById('back-button');
+
+    // Build gallery
+    museumItems.forEach((item, index) => {
+      const card = document.createElement('article');
+      card.className = 'gallery-item';
+      card.tabIndex = 0; // keyboard focus
+      card.innerHTML = `
+        <a href="#" class="image-link" data-index="${index}" aria-label="View details of ${escapeHtml(item.name)}">
+          <img src="${item.image}" alt="${escapeHtml(item.name)}">
+        </a>
+        <div class="meta">
+          <div class="title">${escapeHtml(item.name)}</div>
+          <div class="country">Country: ${escapeHtml(item.country)}</div>
+        </div>
+        <div class="actions">
+          <a href="#" class="view-original" data-index="${index}" aria-label="View details of ${escapeHtml(item.name)}">View original</a>
+        </div>
+      `;
+      gallery.appendChild(card);
+    });
+
+    // Show detail view function
+    function showDetail(index) {
+      const item = museumItems[index];
+      detailImage.src = item.image;
+      detailImage.alt = item.name;
+      detailTitle.textContent = item.name;
+      detailCountry.textContent = item.country;
+      detailPurpose.textContent = item.purpose || 'N/A';
+
+      gallery.style.display = 'none';
+      detailView.style.display = 'block';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // Back to gallery
+    backButton.addEventListener('click', () => {
+      detailView.style.display = 'none';
+      gallery.style.display = 'grid';
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+
+    // Delegate clicks to show details
+    gallery.addEventListener('click', e => {
+      if(e.target.closest('.image-link') || e.target.closest('.view-original')) {
+        e.preventDefault();
+        const index = e.target.closest('[data-index]').getAttribute('data-index');
+        showDetail(index);
+      }
+    });
+
+    // HTML escape helper
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+  </script>
+</body>
+</html>

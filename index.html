@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Access</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      color: #666;
+    }
+    #qrcode img {
+      margin-top: 20px;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Scan to Enter</h1>
+  <p>Scan the QR code below to access the website:</p>
+  <div id="qrcode">
+    <!-- Static QR code image pointing to home.html -->
+    <img src="https://api.qrserver.com/v1/create-qr-code/?data=http://localhost/yourfolder/home.html&size=200x200" alt="QR Code">
+  </div>
+  <p>Or click the button below if you are on the same device:</p>
+  <a href="home.html">Enter Website</a>
+</body>
+</html>

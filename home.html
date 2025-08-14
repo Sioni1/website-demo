@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>Home - Culinary Innovation Village Museum</title>
+  <style>
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('download.webp') no-repeat center center/cover;
+      position: relative;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Overlay for darkening the background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.85) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Container to center content */
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    /* Heading style */
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    /* Subtext style */
+    p {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      max-width: 650px;
+      margin-bottom: 3rem;
+      font-weight: 500;
+      color: #ddd;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      animation: fadeInUp 1.3s ease forwards;
+      opacity: 0;
+    }
+
+    /* Navigation styles */
+    nav {
+      animation: fadeInUp 1.6s ease forwards;
+      opacity: 0;
+    }
+
+    nav a {
+      display: inline-block;
+      padding: 14px 38px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      border: 2.5px solid #ffdd57;
+      border-radius: 40px;
+      background: transparent;
+      box-shadow: 0 0 8px #ffdd57aa;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      background: #ffdd57;
+      color: #222;
+      box-shadow: 0 0 20px #ffdd57ff;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    /* Fade in animations */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      nav a {
+        padding: 12px 30px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>Culinary Innovation Village Museum</h1>
+    <p>Discover and explore a curated collection of historic artifacts that tell stories from across the globe.</p>
+    <nav aria-label="Primary">
+      <a href="gallery.html" role="button">Explore Gallery</a>
+    </nav>
+  </div>
+</body>
+</html>
